@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>测试学习文件</title>
+<title>测试文件</title>
 <meta name="description" content="">
 <meta name="keywords" content="">
 <link href="" rel="stylesheet">
@@ -19,22 +19,26 @@
 <body>
     <div class="container" id="app">
         <h2>我的任务列表</h2>
+        <h3>总共：<span class="label label-info">{{this.count()}}</span>条，已完成:<span class="label label-info">{{this.getCompleted()}}</span>条</h3>
         <ul v-if="todos.length>0" class="list-group">
-            <li class="list-group-item" v-for="todo in todos">
-                <span>{{todo.title}}</span>
-                <a class="btn btn-success btn-xs pull-right">删除</a>
-                <a class="btn btn-warning btn-xs pull-right">完成</a>
+            <li class="list-group-item" v-for="(todo,index) in todos">
+                <span class="label label-success" v-bind:class="{completed:todo.complete}">{{todo.title}}</span>
+                <a class="btn btn-warning btn-xs pull-right" v-on:click="del(index)">删除</a>
+                <a class="btn btn-danger btn-xs pull-right"
+                   @click="toggleComplete(todo)"
+                   v-bind:title="todo.complete?'标记为未完成':'标记为已完成'"
+                >
+                    {{todo.complete?'已完成':'未完成'}}
+                </a>
             </li>
+            <div class="alert alert-danger" role="alert" id="alert-message" style="display: none">{{error}}</div>
         </ul>
-        <form class="form-inline" role="form">
+        <form class="form-inline" role="form" v-on:submit.prevent="addTodo" >
             <div class="form-group">
-                <input type="text" v-model="title" name="title" v-bind:value="title" class="form-control">
+                <input type="text" v-model="title" name="title" placeholder="请输入任务名称" v-bind:value="title" class="form-control">
             </div>
             <div class="form-group">
-                <span class="btn btn-block">{{title}}</span>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-10 col-sm-offset-2">
+                <div class="col-sm-12">
                     <button type="submit" class="btn btn-primary pull-left"><i class="icon-plus"></i> 新增任务</button>
                 </div>
             </div>
@@ -46,23 +50,53 @@
         el: '#app',
         data: {
             todos: [
-                {id:1,"title":'赛维德国邮政专线接入'},
-                {id:2,"title":'皇家邮政接入'},
-                {id:3,"title":'东莞EUB邮政接入'}
+                {id:1,"title":'赛维德国邮政专线接入',complete:true},
+                {id:2,"title":'皇家邮政接入',complete:true},
+                {id:3,"title":'东莞EUB邮政接入',complete:false},
             ],
-            msg:"Hello Vue!",
-            name:'',
-            title:'测试v-model',
-            seen:false
+            title:'',
+            error:'',
         },
-        method:{
-            data(){
-
+        methods:{
+            addTodo(){
+                var todo = {id:null,title:'',complete:false};
+                if(!this.title){
+                    this.error = '请输入任务名称';
+                    $('#alert-message').fadeTo(2000, 500).slideUp(500, function(){
+                        $('#alert-message').alert('close');
+                    });
+                    return;
+                }
+                todo.title = this.title;
+                this.todos.push(todo);
+                this.title='';
+            },
+            del(index){
+                this.todos.splice(index,1);
+            },
+            toggleComplete(todo){
+                todo.complete = !todo.complete;
+            },
+            count(){
+                return this.todos.length;
+            },
+            getCompleted(){
+                var i = 0;
+                for(var k in this.todos){
+                    if(this.todos[k].complete){
+                        i++;
+                    }
+                }
+                return i;
             }
         }
     })
 </script>
 <style>
-
+    .completed{
+        text-decoration: line-through;
+        -webkit-text-decoration-color: orangered;
+        -moz-text-decoration-color: orangered;
+    }
 </style>
 </html>
