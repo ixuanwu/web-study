@@ -22,7 +22,7 @@
         <h3>总共：<span class="label label-info">{{this.count()}}</span>条，已完成:<span class="label label-info">{{this.getCompleted()}}</span>条</h3>
         <ul v-if="todos.length>0" class="list-group">
             <li class="list-group-item" v-for="(todo,index) in todos">
-                <span class="label label-success" v-bind:class="{completed:todo.complete}">{{todo.title}}</span>
+                <span class="label label-success" v-bind:class="{ab:todo.complete}">{{todo.title}}</span>
                 <a class="btn btn-warning btn-xs pull-right" v-on:click="del(index)">删除</a>
                 <a class="btn btn-danger btn-xs pull-right"
                    @click="toggleComplete(todo)"
@@ -93,10 +93,7 @@
     })
 </script>
 <style>
-    .completed{
-        text-decoration: line-through;
-        -webkit-text-decoration-color: orangered;
-        -moz-text-decoration-color: orangered;
-    }
+    .ab {position:relative}
+    .ab:before {content:"";width:100%;height:1px;background:red;position:absolute;top:50%;left:0;}
 </style>
 </html>
