@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>测试文件</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+<!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.css">
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="js/jquery.min.js"></script>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <form action="" method="post" role="form">
+        	<legend>用户信息</legend>
+        	<div class="form-group">
+        		<label for="">姓名：</label>
+        		<input type="text" class="form-control" name="" v-model="userInfo.name" placeholder="输入用户姓名">
+        	</div>
+            <div class="form-group">
+                <label for="">邮箱：</label>
+                <input type="text" class="form-control" name="" v-model="userInfo.email" placeholder="输入用户邮箱">
+            </div>
+        	<button type="button" class="btn btn-primary">保存</button>
+        </form>
+        <!-- 3. #app是Vue实例挂载的元素，应该在挂载元素范围内使用组件-->
+        <my-component v-bind:user-info='userInfo'></my-component>
+    </div>
+</body>
+
+<script type="text/x-template">
+</script>
+<script>
+
+    // 1.创建一个组件构造器
+    var myComponent = Vue.extend({
+        template:"<div><span>{{userInfo.name&&userInfo.email?userInfo.name+'的邮箱是'+userInfo.email:''}}</span></div>",
+        props:['userInfo']
+    });
+
+    // 2.注册组件，并指定组件的标签，组件的HTML标签为<my-component>全局注册
+//    Vue.component('my-component', myComponent);
+
+    new Vue({
+        el: '#app',
+        data:{
+            userInfo:{name:'',email:''}
+        },
+        watch:{
+            userInfo:function(){
+                console.log(this.userInfo);
+            }
+        },
+        components:{
+            'my-component':myComponent //局部注册
+        }
+    });
+</script>
+</html>

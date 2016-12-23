@@ -19,7 +19,9 @@
 <body>
     <div class="container" id="app">
         <h2>我的任务列表</h2>
-        <h3>总共：<span class="label label-info">{{total}}</span>条，已完成:<span class="label label-info">{{completedCount}}</span>条</h3>
+        <h3>总共：<span class="label label-info">{{total}}</span>条，已完成:<span class="label label-info">{{completedCount}}</span>条
+            <a data-toggle="modal" class="btn btn-info btn-plat pull-right" href="#modal-add">添加任务</a>
+        </h3>
         <ul v-if="todos.length>0" class="list-group">
             <li class="list-group-item" v-for="(todo,index) in todos">
                 <span class="label label-success" v-bind:class="{ab:todo.complete}">{{todo.title}}</span>
@@ -32,40 +34,50 @@
                 </a>
             </li>
         </ul>
-        <div class="alert alert-danger" role="alert" id="alert-message" style="display: none">{{error}}</div>
-        <div class='col-sm-6 center-block'>
-            <form action="" method="POST" class="form-horizontal" role="form" v-on:submit.prevent="addTodo">
-                <div v-if="loginType=='username'" class="form-group">
-                    <label for="input" class="col-sm-2 control-label">用户名:</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" placeholder="请输入用户名" key='username-input'>
-                    </div>
-                </div>
-                <div v-else-if="loginType=='email'" class="form-group">
-                    <label for="input" class="col-sm-2 control-label">输入邮箱:</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" placeholder="请输入邮箱" key='email-input'>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="input" class="col-sm-2 control-label">任务名称:</label>
-                    <div class="col-sm-10">
-                        <input type="text" v-model="title" placeholder="请输入任务名称" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="input" class="col-sm-2 control-label">任务名称:</label>
-                    <div class="col-sm-10">
-                        <input class='form-control' v-model="title" v-on:keyup.enter="addTodo" placeholder="输入完按回车添加任务">
-                    </div>
-                </div>
-                <button type="button" @click='toggleType' class="btn btn-primary col-sm-2 btn-block"><i class="icon-plus"></i> 切换方式</button>
-                <button type="button" @click='addTodo' class="btn btn-primary col-sm-2 btn-block"><i class="icon-plus"></i> 新增任务</button>
-            </form>
-        </div>
+        <div class="modal fade" id="modal-add">
+            <template-add></template-add>
+        </div><!-- /.modal -->
     </div>
+
 </body>
+<script type="text/x-template">
+    <template-add>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">新增任务</h4>
+                </div>
+                <div class="modal-body">
+                    <<form action="" method="post" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <input type="text" name="name" id="inputID" class="form-control" value="" title="" required="required" >
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10 col-sm-offset-2">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">新增</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </template-add>
+</script>
 <script type="text/javascript">
+    Vue.component('modal-add-template', {
+        template: '#dialog-template',
+        props: ['show'],
+        methods: {
+            close: function() {
+                this.show = false
+            }
+        }
+    })
     var app = new Vue({
         el: '#app',
         data: {
