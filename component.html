@@ -31,19 +31,20 @@
         	<button type="button" class="btn btn-primary">保存</button>
         </form>
         <!-- 3. #app是Vue实例挂载的元素，应该在挂载元素范围内使用组件-->
-        <my-component v-bind:user-info='userInfo'></my-component>
+        <my-component :user-info='userInfo'></my-component>
     </div>
 </body>
 
-<script type="text/x-template">
+<script type="text/x-template" id="userinfo">
+    <div><span>{{userInfo.name&&userInfo.email?userInfo.name+'的邮箱是'+userInfo.email:''}}</span></div>
 </script>
 <script>
 
     // 1.创建一个组件构造器
-    var myComponent = Vue.extend({
-        template:"<div><span>{{userInfo.name&&userInfo.email?userInfo.name+'的邮箱是'+userInfo.email:''}}</span></div>",
-        props:['userInfo']
-    });
+//    var myComponent = Vue.extend({
+//        template:"<div><span>{{userInfo.name&&userInfo.email?userInfo.name+'的邮箱是'+userInfo.email:''}}</span></div>",
+//        props:['userInfo']
+//    });
 
     // 2.注册组件，并指定组件的标签，组件的HTML标签为<my-component>全局注册
 //    Vue.component('my-component', myComponent);
@@ -59,7 +60,10 @@
             }
         },
         components:{
-            'my-component':myComponent //局部注册
+            'my-component':{
+                'template':'#userinfo',
+                'props':['userInfo'],
+            }
         }
     });
 </script>
